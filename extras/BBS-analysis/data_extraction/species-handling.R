@@ -3,21 +3,20 @@
 # folder
 
 validateSpecies = function(){
-  # The first 7 lines are filler.
-  skip = readLines("proprietary.data/BBS/SpeciesList.txt", n = 7)
+  # The first 9 lines are filler.
+  skip = readLines("proprietary.data/BBS/SpeciesList.txt", n = 9)
   
-  # The sixth line has column names separated by lots of spaces
-  column.names = grep(".$", strsplit(skip[6], " ")[[1]], value = TRUE)
+  # The eigth line has column names separated by lots of spaces
+  column.names = grep(".$", strsplit(skip[8], " ")[[1]], value = TRUE)
   
-  # The seventh line has dashes that can be used for determining column widths
-  dashes = skip[7]
-  
+  # The ninth line has dashes that can be used for determining column widths
+  dashes = skip[9]
   
   # The +1 is to compensate for the spaces between columns of dashes.
   species.df = na.omit(
     read.fwf(
       "proprietary.data/BBS/SpeciesList.txt",
-      skip = 7, 
+      skip = 9, 
       widths = nchar(strsplit(dashes, " ")[[1]]) + 1,
       as.is = TRUE,
       colClasses = "character",
