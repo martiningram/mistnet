@@ -1,8 +1,6 @@
-# FIXME: Delete these lines later on -- only for debugging purposes:
-setwd('/Users/ingramm/Projects/uni_melb/multi_species/gp_modelling/mistnet')
-options(error = recover)
-
 # Vector of stops to include
+
+# This line is required to deal with special characters in bird names
 Sys.setlocale("LC_ALL", "C")
 stops = paste0("Stop", 1:50)
 
