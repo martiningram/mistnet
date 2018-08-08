@@ -1,4 +1,9 @@
+# FIXME: Delete these lines later on -- only for debugging purposes:
+setwd('/Users/ingramm/Projects/uni_melb/multi_species/gp_modelling/mistnet')
+options(error = recover)
+
 # Vector of stops to include
+Sys.setlocale("LC_ALL", "C")
 stops = paste0("Stop", 1:50)
 
 # This file builds the training and test datasets for the analysis in the 
@@ -45,6 +50,7 @@ stop.data.filenames  = dir(
   full.names = TRUE
 )
 
+# FIXME: This is very slow!
 stop.data = do.call(
   rbind,
   lapply(
@@ -64,7 +70,7 @@ valid.AOU = rownames(valid.species.df)
 stop.data = stop.data[stop.data$AOU %in% valid.AOU, ]
 
 # eliminate runs deemed unacceptable above
-stop.data = stop.data[stop.data$RouteDataID %in% runs$RouteDataId, ] 
+stop.data = stop.data[stop.data$RouteDataID %in% runs$RouteDataID, ] 
 
 
 routeDataIDs = unique(stop.data$RouteDataID)
@@ -75,14 +81,14 @@ routeDataIDs = unique(stop.data$RouteDataID)
 routes = read.csv("proprietary.data/BBS/routes.csv", header = TRUE)
 routes = with(
   routes, 
-  routes[RouteTypeID == 1 & RouteTypeDetailId %in% c(1,2), ]
+  routes[RouteTypeID == 1 & RouteTypeDetailID %in% c(1,2), ]
 )
 
 
 
 # The routes file doesn't have unique identifiers, so we have to make some
 makeRouteID = function(mat) apply(
-  mat[,c("countrynum", "statenum", "Route")], 
+  mat[,c("CountryNum", "StateNum", "Route")], 
   1,
   function(x) paste(x, collapse = "-")
 )
@@ -91,19 +97,19 @@ makeRouteID = function(mat) apply(
 # Do I really need two `match` statements?
 routes = routes[
   match(
-    makeRouteID(runs[match(routeDataIDs, runs$RouteDataId), ]),
+    makeRouteID(runs[match(routeDataIDs, runs$RouteDataID), ]),
     makeRouteID(routes)
   ),
 ]
 
-which.runs = match(routeDataIDs, runs$RouteDataId)
+which.runs = match(routeDataIDs, runs$RouteDataID)
 
 ydays = yday(
   ymd(
     paste(
       year,
       runs$Month[which.runs], 
-      runs$Day[match(routeDataIDs, runs$RouteDataId)], 
+      runs$Day[match(routeDataIDs, runs$RouteDataID)], 
       sep = "-"
     )
   )
@@ -116,7 +122,7 @@ start.times = as.numeric(
   )
 ) / 60 / 60
 
-latlon = routes[,c("Longi", "Lati")]
+latlon = routes[,c("Longitude", "Latitude")]
 
 
 # worldclim ---------------------------------------------------------------
